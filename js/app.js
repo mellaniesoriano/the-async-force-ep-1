@@ -44,19 +44,41 @@
         createList.className = 'films';
         displayFilmList.appendChild(createList);
 
-        makeListElements('h2', 'filmTitle', response.results[i].title, createList);
-        makeListElements('h3', 'planetsHeader', 'Planets:', createList);
+        var filmTitle = document.createElement('h2');
+        filmTitle.className = 'filmTitles';
+        filmTitle.innerHTML = response.results[i].title;
+        createList.appendChild(filmTitle);
+
+        var planetsHeader = document.createElement('h3');
+        planetsHeader.id = 'planetsHeader';
+        planetsHeader.innerHTML = 'Planets:';
+        createList.appendChild(planetsHeader);
 
         var filmPlanets = document.createElement('ul');
         filmPlanets.className = 'filmPlanets';
-        filmPlanets.innerHTML = '';
         createList.appendChild(filmPlanets);
 
         for ( var k = 0; k < response.results[i].planets.length; k++ ) {
-          var createPlanetList = document.createElement('li');
-          createPlanetList.className = 'planets';
-          createPlanetList.innerHTML = response.results[i].planets[k];
-          filmPlanets.appendChild(createPlanetList);
+          (function(myPlanets) {
+            var pReq = new XMLHttpRequest();
+            pReq.addEventListener('load', function() {
+            var pRes = JSON.parse(this.responseText);
+
+              var planetListItemContainer = document.createElement('li');
+              planetListItemContainer.className = 'planet';
+
+              var planetTitleHeading = document.createElement('h4');
+              planetTitleHeading.className = 'planetName';
+              planetTitleHeading.innerHTML = pRes.name;
+
+              planetListItemContainer.appendChild(planetTitleHeading);
+              myPlanets.appendChild(planetListItemContainer);
+
+
+            });
+            pReq.open('GET', response.results[i].planets[k]);
+            pReq.send();
+          })(filmPlanets);
 
 
         }
@@ -69,11 +91,11 @@
 
 
   createPersonRequest('http://swapi.co/api/people/4/', '#person4Name', 'name');
-   createPersonRequest('http://swapi.co/api/people/4/', '#person4HomeWorld', 'homeworld');
-   createPersonRequest('http://swapi.co/api/people/14/', '#person14Name', 'name');
-   createPersonRequest('http://swapi.co/api/species/1/', '#person14Species', 'name');
+  createPersonRequest('http://swapi.co/api/people/4/', '#person4HomeWorld', 'homeworld');
+  createPersonRequest('http://swapi.co/api/people/14/', '#person14Name', 'name');
+  createPersonRequest('http://swapi.co/api/species/1/', '#person14Species', 'name');
 
-   createFilmRequest('http://swapi.co/api/films/', '#filmList', 'title');
+  createFilmRequest('http://swapi.co/api/films/', '#filmList');
 
 
 })();

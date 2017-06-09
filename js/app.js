@@ -44,15 +44,8 @@
         createList.className = 'films';
         displayFilmList.appendChild(createList);
 
-        var filmTitle = document.createElement('h2');
-        filmTitle.className = 'filmTitles';
-        filmTitle.innerHTML = response.results[i].title;
-        createList.appendChild(filmTitle);
-
-        var planetsHeader = document.createElement('h3');
-        planetsHeader.id = 'planetsHeader';
-        planetsHeader.innerHTML = 'Planets:';
-        createList.appendChild(planetsHeader);
+        makeListElements('h2', 'filmTitles', response.results[i].title, createList);
+        makeListElements('h3', 'planetsHeader', 'Planets:', createList);
 
         var filmPlanets = document.createElement('ul');
         filmPlanets.className = 'filmPlanets';

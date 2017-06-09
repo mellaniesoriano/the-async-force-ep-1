@@ -8,7 +8,7 @@
 
     function getPerson() {
       var response = JSON.parse(this.responseText);
-      console.log(response);
+      // console.log(response);
       if ( Array.isArray(response[propertyName]) ) {
         for ( var i = 0; i < response[propertyName].length; i++ ) {
           createPersonRequest(response[propertyName][i], id, propertyName);
@@ -21,11 +21,6 @@
     }
   }
 
-  function getElements(id, objVal) {
-    var getElement = document.getElementById(id);
-    getElement.innerHTML = objVal;
-  }
-
   function makeListElements(type, className, content, appendTarget) {
     var newElement = document.createElement(type);
     newElement.className = className;
@@ -33,7 +28,7 @@
     appendTarget.appendChild(newElement);
   }
 
-  function createFilmRequest(url, id, propertyName) {
+  function createFilmRequest(url, id) {
     var oReq = new XMLHttpRequest();
     oReq.addEventListener('load', getFilms);
     oReq.open('GET', url);
@@ -42,9 +37,29 @@
     function getFilms() {
       var response = JSON.parse(this.responseText);
       var displayFilmList = document.querySelector(id);
+      console.log(response);
 
       for ( var i = 0; i < response.results.length; i++ ) {
-        makeListElements('h2', 'filmTitle', response.results[i][propertyName], displayFilmList);
+        var createList = document.createElement('li');
+        createList.className = 'films';
+        displayFilmList.appendChild(createList);
+
+        makeListElements('h2', 'filmTitle', response.results[i].title, createList);
+        makeListElements('h3', 'planetsHeader', 'Planets:', createList);
+
+        var filmPlanets = document.createElement('ul');
+        filmPlanets.className = 'filmPlanets';
+        filmPlanets.innerHTML = '';
+        createList.appendChild(filmPlanets);
+
+        for ( var k = 0; k < response.results[i].planets.length; k++ ) {
+          var createPlanetList = document.createElement('li');
+          createPlanetList.className = 'planets';
+          createPlanetList.innerHTML = response.results[i].planets[k];
+          filmPlanets.appendChild(createPlanetList);
+
+
+        }
       }
     }
 
